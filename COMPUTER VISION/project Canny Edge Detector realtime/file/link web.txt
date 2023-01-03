@@ -1,0 +1,3 @@
+https://www.geeksforgeeks.org/real-time-edge-detection-using-opencv-python/
+
+https://code.tutsplus.com/id/tutorials/canny-edge-detector-using-python--cms-30095

@@ -1,0 +1,168 @@
+SubQuery
+
+Dalam aplikasi yang menggunakan database tidak akan pernah terlepas dalam perolehan kembali data.Untuk memunculkan data yang dikemas lebih baik agar memudahkan pengguna data 
+untuk mengerti dan memahami data tentunya tidak akan lepas dari query-query sql yang lebih komplek apalagi data antara table satu dengan table lainnya saling berhubungan.
+sangat panjang jika kita menulis subquery dalam satu baris(baris tunggal)  dan multiple-row subqueris(banyak baris) dimana hanya satu kolom 
+saja yang ingin ditampilkan degnan perintah select dan ini digunakan untuk mengevaluasi dari expression dalam induk perintah select.
+jika ingin membandingkan dua atau lebih kolom kita harus menulis sebuah gabungan klausa WHERE menggunakan operator logika. menggunakan multiple-subqueries, kita dapat 
+mengkombinasikan duplikat kondisi where ke dalam satu klausa WHERE
+
+-> Sintaks Umum
+	SELECT kolom, kolom,...
+	FROM table
+	WHERE (kolom, kolom,...) IN
+		SELECT kolom, kolom,..
+		FROM table
+		WHERE kondisi);
+
+a. SubQuery Perbandingan Kolom
+	Multiple kolom membandingkan ke dalam subquery dan dijadikan campuran perbandingan atau pasangan perbandingan. Jika kita mempertimbangkan contoh "menampilkan secara detail dari 
+	pekerja yang bekerja di beberapa department dan memiliki beberapa manager seperti 'Daniel'", kita dapat melihat hasilnya dari statement berikut:
+
+	(Book Version)	
+	-> 	SELECT first_name, last_name, manager_id, 
+		department_id FROM employees
+			WHERE manager_id IN(select manager_id FROM employees WHERE first_name='Daniel')
+			AND department_id IN (SELECT department_id FROM employees WHERE first_name = 'Daniel');
+
+	(My Version)
+	->	SELECT first_name, last_name, manager_id, department_id 
+		FROM employees
+		WHERE manager_id IN(select manager_id FROM employees WHERE first_name='Daniel')
+		AND department_id IN (SELECT department_id FROM employees WHERE first_name = 'Daniel');
+	 		
+
+b. SubQuery Pasangan Perbandingan Subquery
+	1) Menampilkan secara detail dari pekerja yang di manage oleh beberapa manager dan bekerja di beberapa department sebagai pekerja yang first_name nya adalah 'John'
+
+		->	SELECT employees_id, manager_id, department_id
+			FROM employees WHERE
+				(manager_id, department_id) IN
+				(SELECT manager_id, department_id FROM employees
+				WHERE first_name = 'John')
+				AND first_name <> 'John';
+
+	2) Pada contoh diatas adalah contoh tampilan hasil dari query kombinasi nilai dari kolom manager_id dan kolom department_id untuk masing-masing baris pada table employees 
+	   dengan nilai pada kolom manager_id dan kolom department_id untuk pekerja dengan first_name adalah 'John', subquery untuk mendapatkan kembali nilai dari manager_id dan 
+	   department_id untuk employees dengan first_name 'John' dieksesuki.
+
+	3) Nilai perbandingan dengan kolom manager_id dan department_id untuk masing-masing baris dalam table employees. Jika kombinasi sesuai, baris akan ditampilkan. Dalam output, 
+	   record dari employees dengan first_name 'John' tidak akan ditampilkan.
+
+c. SubQuery Non Pasangan Perbandingan Subquery
+	1) Menampilkan secara detail dari pekerja yang dimanage beberapa manager pekerja dengan first_name 'John' dan bekerja di beberapa department dengan first_name 'John'
+		
+		-> SELECT employee_id, manager_id, department_id
+		   FROM employees
+		   WHERE manager_id IN
+		   (SELECT manager_id
+		   FROM employees
+		   WHERE first_name = 'John')
+		   AND
+		   department_id IN
+		   (SELECT department_id
+		   FROM employees
+		   WHERE first_name = 'John')
+		   AND
+		   first_name <> 'John';
+
+d. Ekspresi-ekspres Scalar SubQuery
+	1) Scalar subquery adalah subquery yang mengembalikan tepat satu nilai kolom dari suatu baris. Scalar subquery dapat digunakan di:
+		- Bagian kondisi dan expresi dari DECODE and CASE
+		- Semua klausa dari SELECT kecuali GROUP BY
+	2) Contoh scalar subquery dapat CASE expression :
+		-> SELECT employee_id, last_name, (
+		   CASE
+		   WHEN department_id = 
+		   (SELECT department_id FROM departments 
+		   WHERE location_id = 1800)
+		   THEN 'Canada' ELSE 'USA' END) location FROM employees;
+	3) Contoh subquery dalam klausa order by :
+		-> SELECT employee_id, last_name FROM employees e 
+		   ORDER BY (SELECT department_name FROM departments d
+		   WHERE e.department_id = d.department_id);
+
+e. Korelasi SubQuery
+	1) Korelasi subquery digunakan untuk proses baris-perbaris. Masing-masing subquery di eksekusi setelah setiap baris setelah query paling luar. 
+	   Oracle server menampilkan sebuah korelasi query mengacu sebuah kolom dari table yang menunjuk dapat parent statement.
+	   Korelasi subquery dievaluasi ketika setiap baris diproses oleh statement  induk. Induk statement  dapat berupa select, update atau delete.
+	2) Syintax umum:
+		-> SELECT kolom1, kolom2,...
+		   FROM table1 OUTER
+		   WHERE kolom1 operator
+		   (SELECT kolom1, kolom2,...
+		   FROM table2
+		   WHERE expresi = outer.expresi2);
+	3) Menampilkan semua pekerja yang mendapatkan lebih dari rata-rata gaji dari department tertentu
+		-> SELECT last_name, salary, department_id FROM
+		   employees OUTER
+		   WHERE salary >
+		   (SELECT AVG(salary)
+		   FROM employees
+		   WHERE department_id = OUTER.department_id);
+
+f. Menggunakan Operator Exists
+	1) Operator EXISTS mengecek  keberadaan dari baris dalam hasil subquery
+	2) jika nilai baris dari subquery ditemukan :
+		- pencarian tidak akan dilanjutkan dalam query terdalam
+		- kondisi tetap benar
+	3) Jika nilai baris dari subquery tidak ditemukan :
+		- Kondisi akan salah
+		- pencarian akan diteruskan sampai pada query paling dalam
+	4) Menemukan pekerja yang paling sedikit  memberikan laporan:
+		-> SELECT employee_id, last_name, job_id, department_id 
+		   FROM employees OUTER
+		   WHERE EXISTS (SELECT 'X' FROM employees
+		   WHERE manager_id = OUTER.employee_id);
+
+g. Korelasi Update
+	1) menggunakan korelasi query untuk update baris berdasar pada beris dari table lain
+	2) Syntax umum :
+		-> UPDATE table1 alias 
+		   SET kolom=(SELECT expression
+					FROM table2 alias
+					WHERE alias1.kolom = alias2.kolom);
+	3) Denormalisasi table EMP16 degnan menambahkan sebuah kolom untuk memasukan pada department name
+		-> CREATE table emp16 AS SELECT * FROM employees;
+		-> ALTER table emp16 add(department_name varchar2(25));
+		-> SELECT department_name FROM emp16;
+			(SELECT department)name FROM departments d 
+			WHERE e.department_id = d.department_id);
+		   SELECT department_name FROM emp16;
+
+h. Korelasi Delete
+	1) Menggunakan korelasi subquery untuk mendelete row berdasarkan pada baris dari table lain
+	2) Syntax umum :
+		-> DELETE FROM table1 alias 
+		   WHERE kolom operator
+			(SELECT expression FROM table alias2
+			WHERE alias1.kolom=alias2.kolom);
+	3) Penerapan
+		-> DELETE FROM emp16 E WHERE employee_id =(
+		   SELECT employee_id FROM employees WHERE employee_id=E.employee_id);
+		   SELECT * FROM emp16;
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

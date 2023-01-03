@@ -1,0 +1,179 @@
+AGGREGASI
+
+
+a. IN 
+	1) SELECT * FROM rekening WHERE kode_cabang IN ('BRUM', 'BRUL');
+	2) Perintah SQL di atas sama dengan
+		-> SELECT * FROM rekening WHERE kode_cabang = 'BRUM' OR kode_cabang = 'BRUL';
+
+
+	
+b. NOT IN
+	1) SELECT * FROM rekening WHERE kode_cabang NOT IN ('BRUM', 'BRUL'); 
+	2) Perintah SQL di atas sama dengan (<> == !=)
+		-> SELECT * FROM rekening WHERE kode_cabang <> 'BRUM' AND kode_cabang <> 'BRUL';
+
+	3) Nilai NULL tidak akan tampil dalam IN dan NOT IN
+
+-> PERHATIAN
+	Perhatikan perbedaan penggunaan OR dan AND dalam IN dan NOT IN
+
+
+
+c. BETWEEN
+	1) SELECT * FROM rekening WHERE soldo BETWEEN 500000 AND 1000000;
+	2) Perintah SQL di atas sama dengan 
+		-> SELECT * FROM rekening WHERE saldo >=500000 AND saldo <= 1000000;
+	3) Nilai yang pertamaa dalam BETWEEN harus lebih kecil dari nilai yang kedua
+	4) Bisa untuk string
+
+
+
+
+d. NOT BETWEEN
+	1) SELECT * FROM rekening WHERE saldo NOT BETWEEN 500000 AND 1000000;
+	2) Perintah SQL di atas sama dengan
+		-> SELECT * FROM rekening WHERE saldo < 500000 OR saldo > 1000000;
+
+-> PERHATIAN
+	Perhatikan perbedaan penggunaan AND dan OR dalam BETWEEN dan NOT BETWEEN
+
+
+
+
+e. AGGREGATE FUNCTIONS
+	1) MIN()
+		- Digunakan untuk mencari nilai terkecil dari sekumpulan record
+			-> SELECT MIN(saldo) FROM rekening;
+		- Bisa dibatasi dengan WHERE clause sehingga hanya record tertentu yang ditelusuri
+			-> SELECT MIN(saldo) FROM rekening WHERE kode_cabang='BRUS';
+
+	2) MAX()
+		- Digunakan untuk mencari nilai terbesar dari sekumpulan record
+			-> SELECT MAX(saldo) FROM rekening;
+		- Bisa dibatasi dengan WHERE clause sehingga hanya record tertentu yang ditelusuri
+			-> SELECT MAX(saldo) FROM rekening WHERE kode_cabang='BRUS';
+
+	3) COUNT()
+		- Digunakan untuk menghitung banyaknya record
+			-> SELECT COUNT(*) FROM nasabah;
+			-> SELECT COUNT(nama_nasabah) FROM nasabah;
+			-> SELECT COUNT(alamat_nasabah) FROM nasabah;
+		- Juga bisa dibatasi dengan WHERE caluse, jika kita ingin menghitung banyaknya record yang unit (tidak ada pengulangan), gunakan DISTINCT
+			-> SELECT COUNT(DISTINCT alamat_nasabah) FROM nasabah;
+
+	4) AVG()
+		- Digunakan untuk menghitung rata-rata nilai dari sekumpulan record
+			-> SELECT AVG(saldo) FROM rekening;
+		- Bisa dibatasi dengan WHERE clause
+			-> SELECT AVG(saldo) FROM rekening WHERE kode_cabang='BRUS';
+
+-> PERHATIAN
+	- beberapa Aggregate function bisa digabungkan dalam satu perintah SQL
+		-> SELECT MIN(saldo), MAX(saldo), AVG(saldo) FROM rekening;
+	- Bisa menambahkan ekspresi aritmatika:
+		-> SELECT SUM(saldo + 10000) FROM rekening;
+		-> SELECT SUM(saldo) + 10000 FROM rekening;
+		-> SELECT MAX(saldo) - MIN(saldo) FROM rekening;
+	- Bisa menggunakan coulmn alias (AS) untuk membuat tampilan lebih profesional
+
+
+
+
+
+f. GROUP BY
+	1) Digunakan untuk mengelompokkan sekumpulan record berdasarkan (kolom-kolom) tertentu
+		-> SELECT jenis_transaksi FROM transaksi GROUP BY jenis_transaksi;
+		-> SELECT jenis_transaksi, tanggal FROM transaksi GROUP BY jenis_transaksi, tanggal;
+	2) Hasil yang sama bisa didapatkan dengan menggunakan DISTINCT
+		-> SELECT DISTINCT jenis_transaksi, tanggal FROM transaksi;
+
+-> PERHATIAN
+	- Jika menggunakan GROUP BY, semua field yang ingin ditampilkan dalam SELECT harus tercantum di GROUP BY
+	- Contoh yang salah :
+		-> SELECT jenis_transaksi, tanggal FROM transaksi GROUP BY jenis_transaksi;
+		-> SELECT jenis_transaksi, tanggal FEOM transaksi GROUP BY tanggal;
+	- Contoh yang benar :
+		-> SELECT jenis_transaksi, tanggal FROM transaksi GROUP BY jenis_transaksi, tanggal;
+
+
+
+
+
+g. HAVING
+	1) Merupakan pasangan dari GROUP BY, digunakan untuk membatasi kelompok yang ditampilkan
+		-> SELECT jenis_transaksi, tanggal FROM transaksi GROUP BY jenis_transaksi, tanggal HAVING jenis_transaksi = 'kredit';
+	2) Hasil yang sama bisa didapatkan dengan :
+		-> SELECT jenis_transaksi, tanggal FROM transaksi WHERE jenis_transaksi = 'kredit' GROUP BY jenis_transaksi,tanggal;
+
+-> PERHATIAN
+	- Jika menggunakan HAVING, maka pembatasan dilakuakan setelah hasil dikelompokkan dalam GROUP BY
+	- Jika mengguanakan WHERE, maka pembatasan dilakukan sebelum hasil dikelompokkan dalam GROUP BY
+	- FIeld yang disebut di HAVING harus ada di GROUP BY, atau berupa aggregate functions
+	- Contoh yang salah :
+		-> SELECT jenis_transaksi, tanggal FROM transaksi GROUP BY jenis_transaksi, tanggal HAVING jumlah = 50000;
+	-Contoh yang benar :
+		-> SELECT jenis_transaksi, tanggal FROM transaksi WHERE jumlah=50000 GROUP BY jenis_transaksi, tanggal;
+
+
+
+
+
+f. GROUP BY dan AGGREGATE
+	1) GROUP BY sangat cocok untuk aggregate functions. Dengan menggunakan GROUP BY, kita bisa mengelompokkan record-record dan menghitung min, max, count, sum, dan avg untuk masing-masing kelompok
+		-> SELECT kode_cabang, MIN(saldo), MAX(saldo), COUNT(*), SUM(saldo), AVG(saldo) FROM rekening GROUP BY kode_cabang;
+	2) Bisa digabungkan dengan tabel join dan ORDER BY :
+		-> SELECT nama_cabang, SUM(saldo) FROM rekening NATURAL JOIN cabang_bank GROUP BY nama_cabang ORDER BY nama_cabang;
+		-> hasil diatas menampilkan total saldo untuk masing-masing cabang_bank
+	3) Perintah SQL di bawah menampilkan banyaknya nasabah yang dilayani oleh masing-masing cabang bank;
+		-> SELECT nama_cabang, COUNT(DISTINCT id_nasabah) FROM cabang_bank NATURAL JOIN rekening NATURAL JOIN nasabah_has_rekening GROUP BY nama_cabang ORDER BY nama_cabang;
+	4) CONTOH dengan HAVING :
+		-> SELECT kode_cabang, SUM(saldo), COUNT(*) FROM rekening GROUP BY kode_cabang HAVING SUM(saldo) >= 5000000 ORDER BY kode_cabang;
+
+
+-> PERHATIAN
+	- Karena SUM(saldo) hanya bisa dihitung setelah hasil dikelompokkan dengan GROUP BY,  maka kita harus menggunakan HAVING untuk membatasi hasil berdasarkan  SUM(saldo) >= 5000000. Kita tidak bisa menggunakan WHERE
+
+
+
+-> URUTAN
+	- SELECT, FROM, WHERE, GROUP BY, ORDER BY
+
+-> PERHATIAN
+
+having digunakan apabila harus dikelompokan dulu misal nya sum
+sedangkan where data di seleksi dulu kemudian di kelompokan
+
+where digunakan sebelum group
+having digunakan setelah group
+
+apa yang ada di select harus ada di group dan juga apa yang ada di having harus ada di group , tidak semua having mengikuti isi group hanya yang dibutuhkan untuk seleksi saja
+
+
+-> SQL ANY and ALL Operators
+	1) ALL
+		- mengembalikan nilai boolean sebagai hasilnya
+		- mengembalikan TRUE jika SEMUA nilai subquery memenuhi kondisi
+		- digunakan dengan pernyataan SELECT, WHERE dan HAVING
+		- ALL berarti bahwa kondisi akan benar hanya jika operasi benar untuk semua nilai dalam rentang.
+			-> SELECT n.nama_nasabah, t.jumlah 
+			   FROM nasabah n INNER JOIN transaksi t ON n.id_nasabah = t.id_nasabahFK WHERE t.jumlah = ALL(SELECT max(jumlah) FROM transaksi);
+		-> dari contoh diatas jika kita tidak menggunakan ALL maka hanya dapat menampilkan 1 user saja
+	2) ANY
+		- mengembalikan nilai boolean sebagai hasilnya
+		- mengembalikan TRUE jika APAPUN dari nilai subquery memenuhi kondisi
+		- APAPUN berarti kondisi akan benar jika operasi benar untuk salah satu nilai dalam rentang.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

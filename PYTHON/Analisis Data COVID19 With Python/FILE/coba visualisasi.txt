@@ -1,0 +1,41 @@
+df_covid_denormalized_asean_confirmed_cases = df_covid_denormalized_asean.groupby(['country_name'])['daily_confirmed_cases'].sum().reset_index()
+
+print(df_covid_denormalized_asean_confirmed_cases)
+df_covid_denormalized_asean_confirmed_cases.to_excel("df_covid_denormalized_asean_confirmed_cases_fix.xlsx") 
+
+
+
+
+
+
+
+
+
+
+
+df = pd.read_excel("df_covid_denormalized_asean_confirmed_cases_fix - Copy.xlsx")
+
+
+#Import libraries
+from plotly import graph_objects as go
+
+#Create figure object
+fig = go.Figure(
+    go.Choroplethmapbox(
+        #geojson = geo_taiwan, #Assign geojson file
+        #featureidkey = "properties.COUNTYNAME", #Assign feature key
+        locations = df["country_name"], #Assign location data
+        z = df["daily_confirmed_cases"], #Assign information data
+        zauto = True,
+        colorscale = 'viridis',
+        showscale = True,
+    )
+)
+
+#Update layout
+fig.update_layout(
+    mapbox_style = "carto-positron", #Decide a style for the map
+    mapbox_zoom = 6, #Zoom in scale
+    #mapbox_center = {"lat": 23.9, "lon": 121.52}, #Center location of the map
+)
+

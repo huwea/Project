@@ -1,0 +1,532 @@
+---
+title: "Project Ke-2"
+author: "huans"
+date: "2022-10-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Product Packaging
+Baik sebelum melakukan analysis ada beberapa tahapan yang harus kita pahami yaitu
+6 FASE ANALISIS DATA
+
+1. Bertanya/ ask
+kita melakukan dua hal yaitu mendefinisikan masalah yang harus dipecahkan dan kita memastikan bahwa kita memahami sepenuhnya harapan dari pemangku kepentingan/ stakeholder. Ini membantu anda tetap fokus pada masalah itu sendiri bukan hanya gejalanya. Pertanyaan 5 whys membantu pada tahap ini. Berkomunikasi dengan pemangku kepentingan anda adalah kunci untuk membuat anda tetap terlibat dan di jalur yang tepat selama pelaksanaan proyek. Mendefinisikan masalah berarti anda melihat keadaan saat ini dan mengidentifikasi keadaan dibandingkan dengan keadaan ideal. Berikut ini adalah beberapa pertanyaan yang sering diajukan
+Apa masalah yang kita coba selesaikan?, Apa tujuan dari analisis ini?, Apa pelajaran yang kita harapkan dari masalah itu?
+
+2. Mempersiapkan/ prepare
+Ini adalah langkah dimana data analyst mengumpulkan dan menyimpan data yang akan kita gunakan untuk proses analisis berikutnya. Mengidentifikasi jenis data apa yang paling berguna untuk memecahkan suatu masalah tertentu. data dan hasil analisis Anda yang objektif dan tidak bias adalah sangat penting. Dengan kata lain, setiap keputusan yang dibuat dari analisis Anda harus selalu didasarkan pada fakta dan kejujuran, serta tidak memihak
+
+3. Memproses/ process
+Hal yang dilakukan pada tahap ini adalah menemukan dan menghilangkan setiap kesalahan dan ketidakakuratan yang dapat menghambat perolehan hasil. Biasanya yang dilakukan adalah membersihkan data, mengubahnya menjadi format yang lebih berguna, menggabungkan dua atau lebih, untuk memperoleh informasi lebih lengkap dan menghilangkan data pencilan (outlier) yaitu data observasi yang dapat memberatkan ketimpangan informasi.
+Memeriksa data yang kita persiapkan untuk memastikan data yang lengkap dan benar. Tahap ini adalah tahap di mana kita harus memperoleh detail data dengan benar. Jadi Kita juga akan memperbaiki kesalahan ketik, inkonsistensi, atau data yang hilang dan tidak akurat. Untuk melengkapinya, kita juga menerapkan strategi untuk memverifikasi dan membagikan pembersihan data kita dengan pemangku kepentingan
+
+4. Menganalisis/ analyze
+Menganalisis data untuk menemukan pola, hubungan, dan tren. Diperlukan penggunaan alat untuk mengubah dan mengatur informasi sehingga Anda dapat menarik kesimpulan yang bermanfaat, membuat prediksi, serta memberi saran yang tepat untuk pengambilan keputusan. Misal menggunakan spreadshet, R, Python, SQL
+
+5. Membagikan/share
+Visualisasi
+Para analis membagikan temuan dan rekomendasi mereka kepada pihak yang memang berkepentingan. Bagaimana analis data menafsirkan hasil dan membagikannya dengan orang lain untuk membantu pemangku kepentingan membuat keputusan berdasarkan data secara efektif. Pada tahap berbagi, visualisasi adalah teman terbaik seorang analis data. visualisasi itu penting untuk membuat orang lain memahami apa yang data Anda katakan. Dengan visual yang tepat, fakta dan angka menjadi jauh lebih mudah untuk dilihat dan konsep yang kompleks menjadi lebih mudah dipahami.
+
+6. Bertindak/ act
+Hal ini berkaitan erat dengan menerapkan wawasan kita untuk menyelesaikan masalah, mengambil keputusan, membuat hal baru. Saat yang menyenangkan ketika suatu perusahaan menerima semua wawasan yang telah kita sediakan, sebagai data analyst, dan mengelola data tersebut sedemikian rupa untuk memecahkan asal masalah perusahaan tersebut
+
+<br>
+
+#### STUDY CASE
+
+Sebuah toko fashion yang menjual berbagai produk seperti jeans, kemeja, kosmetik, dan lain-lain. Walaupun cukup berkembang, namun dengan semakin banyaknya kompetitor dan banyak produk yang stoknya masih banyak membuat manajer toko kahwatir. Salah satu solusi adalah membuat paket yang inovatif. Dimana produk yang sebelumnya tidak terlalu laku tapi punya pangsa pasar malah bisa dipaketkan dan laku.Disini manager toko menyuruh kita untuk mengidentifikasi paket produk yang menarik untuk dipaketkan sehingga akhirnya bisa meningkatkan keuntungan dan loyalitas para pelanggan toko fashion. Dan untuk wewujudkan ini, saya menggunakan R dan algoritma aproriari dari paket arules di sepanjang project ini. Agar analisis lebih terarah maka kita bagi jadi 3 fokus yaitu :
+<br>
+<br>
+1. Mendapatkan insight top 10 dan bottom 10 dari produk yang terjual.
+<br>
+2. Mendapatkan daftar seluruh kombinasi paket produk dengan korelasi yang kuat.
+<br>
+3. Mendapatkan daftar seluruh kombinasi paket produk dengan item tertentu.
+
+<br>
+<br> 
+
+#### Bertanya/ ask
+
+Dari study case diatas dapat kita ketahui pemangku kepentingannya adalah manajer toko. Harapan dari manajer tersebut adalah agar kita mengidentifikasi paket produk yang menarik.Agar analisis lebih terarah kita bagi jadi 3 fokus seperti yang sudah disebutkan di study case diatas
+
+<br>
+<br> 
+
+#### Mempersiapkan/ prepare
+Dalam case ini kita sudah disediakan data oleh pihak toko yang mana berisi 2 column saja yaitu kode_transaksi dan Nama_barang. Data yang disediakan dalam format tsv yang meiliki 33.669 baris dan 3.450 kode transaksi
+
+<br> 
+<br> 
+
+#### Memproses/ process
+Seperti yang sudah disinggung diatas disini  saya menggunakan R dan algoritma aproriari dari paket arules. Algoritma aproriari merupakan salah satu algoritma klasik untuk mencari frequent
+item/itemset pada transactional database. Algoritma Apriori digunakan agar computer dapat mempelajari aturan asosiasi, mencari pola hubungan antar satu atau lebih item dalam suatu dataset.Dalam study case ini kita memiliki data transaksi/market basket sehingga kita dapat melakukan analisa terhadap kemungkinan membeli product yang lainnya. 
+
+<br>
+
+**Cek data isi data frame**
+```{r}
+#import dataset
+dataset_raw = read.csv('transaksi_dqlab_retail.tsv', sep="\t")
+
+#cek tipe data
+class(dataset_raw)
+
+#tampilkan 6 data teratas
+head(dataset_raw)
+```
+
+<br> 
+
+
+```{r include=TRUE}
+#Menyajikan informasi tiap kolom dataset dalam format yang compact
+str(dataset_raw)
+```
+
+Dari data diatas dapat kita ketahui jumlah baris data ada 33.668 baris yang terdiri dari 2 column yaitu Kode.Transaksi dan Nama.Barang dengan tipe data nya chr
+
+<br> 
+
+```{r}
+#Cek nilai null
+is.null(dataset_raw)
+```
+Dari hasil diatas kita dapat mengetahui bahwa dataset tidak memiliki nilai null
+
+<br>
+
+```{r include=FALSE}
+
+# Menghitung unique value dari column kode_transaksi
+#library(dplyr)
+#dataset_raw %>%  
+#  length(unique(dataset_raw$Kode.Transaksi))
+
+  #n_distinct(dataset_raw$Kode.Transaksi, na.rm = TRUE)
+
+```
+
+
+<br>
+
+
+```{r include=FALSE}
+#dataset_raw = read.csv('transaksi_dqlab_retail.tsv')
+#hasil %>%
+#  sum(Jumlah)
+```
+
+
+<br> 
+
+**kita import libary arules**
+```{r}
+library(arules)
+```
+
+<br> 
+
+**kita import libary dplyr**
+```{r}
+library(dplyr)
+```
+
+<br> 
+
+**Pertama kita ubah format dari dataset transaksi_dqlab_retail.tsv menjadi format yang dapat digunakan oleh paket arules dengan cara dibawah ini**
+```{r}
+#rubah bentuk data frame
+transaksi_tabular <- read.transactions(file="transaksi_dqlab_retail.tsv", format="single", sep="\t", cols=c(1,2), skip=1)
+
+#simpan hasil konversi ke dalam file test_project_retail_1.txt
+write(transaksi_tabular, file="test_project_retail_1.txt", sep=",")
+```
+
+
+```{r}
+#cek data transaksi_tabular
+transaksi_tabular
+```
+dapat kita lihat format datanya sudah berubah hal ini bisa kita lihat dari jumlah baris dan columnnya
+
+```{r}
+
+#cek tipe datanya
+class(transaksi_tabular)
+```
+jika kita cek tipe datanya maka bentuknya sudah bukan dataframe lagi melainkan dalam bentuk yang dapat diolah dengan algoritma arules
+
+```{r}
+#Menyajikan informasi tiap kolom dataset dalam format yang compact
+str(transaksi_tabular)
+
+```
+jika kita cek dengan fungsi str maka formatnya sudah bukan dalam bentuk dataframe lagi melainkan sudah berbentuk algoritma, sehingga kita tidak dapat melihat variable transaksi_tabular dalam bentuk dataframe
+
+```{r include=FALSE}
+#cek isi data transaksi_tabular
+#head(transaksi_tabular)
+```
+
+<br> 
+
+```{r}
+#lihat isi file test_project_retail_1.txt yang mana merupakan variable transaksi_tabular yang di sep ',' 
+dataset_test_project_retail_1 = read.delim('test_project_retail_1.txt')
+
+#cek 6 data teratas
+head(dataset_test_project_retail_1)
+
+```
+
+```{r}
+#cek tipe data 
+class(dataset_test_project_retail_1)
+```
+dari data diatas kita dapat mengetahui bahwa tipe datanya sekarang sudah menjadi data.frame
+
+
+```{r}
+#Menyajikan informasi tiap kolom dataset dalam format yang compact
+str(dataset_test_project_retail_1)
+```
+jika kita cek file txt dari variable transaksi_tabular yang di sep ',' terdiri dari 3.449 baris dengan 1 column
+
+<br>
+
+**Output Awal: Statistik Top 10**
+```{r}
+#rubah bentuk data frame kebentuk tabular seperti variable transaksi_tabular diatas 
+data <- read.transactions(file ="transaksi_dqlab_retail.tsv", format = "single", sep = "\t", cols = c(1,2), skip=1)
+
+#select top 10
+#decreasing true artinya diurutkan dari besar ke kecil, false dari kecil ke besar
+top_10 <- sort(itemFrequency(data, type="absolute"), decreasing = TRUE)[1:10] #menggunakan cara slicing
+#tampilkan isinya
+top_10
+
+#cek tipe data top_10
+class(top_10)
+
+#jika kita cek top_10 dengan str
+str(top_10)
+
+#create to data.frame
+hasil <- data.frame("Nama Produk" = names(top_10), "Jumlah" = top_10, row.names = NULL)
+#simpan hasilnya kedalam file top10_item_retail.tx
+write.csv(hasil, file="top10_item_retail.txt")
+```
+
+
+```{r}
+#cara lain mengambil data
+#menggunakan dplyr / library(dplyr)
+#sort() masi dari default r, tapi mulai dari itemFrequency sudah punya arules
+dpl <- sort(itemFrequency(data, type="absolute"), decreasing = TRUE)
+dpl %>%
+  head(10)#default head nya adalah 6 
+
+
+```
+
+```{r}
+#Kita juga bisa tampilkan dalam bentuk data frame
+#nanti otomatis tipe datanya juga jadi "data.frame"
+data.frame("Nama Product"=names(top_10), "Jumlah"=top_10, row.names = NULL)
+
+
+
+```
+
+
+
+
+
+**Output Awal: Statistik Bottom 10**
+```{r}
+#rubah bentuk data frame kebentuk tabular seperti variable transaksi_tabular diatas 
+data <- read.transactions(file ="transaksi_dqlab_retail.tsv", format = "single", sep = "\t", cols = c(1,2), skip=1)
+
+#select top 10
+#decreasing true artinya diurutkan dari besar ke kecil, false dari kecil ke besar
+bottom_10 <- sort(itemFrequency(data, type="absolute"), decreasing = FALSE)[1:10] #menggunakan cara slicing
+#tampilkan isinya
+bottom_10
+
+
+#cek tipe data bottom_10
+class(bottom_10)
+
+#jika kita cek bottom_10 dengan str
+str(bottom_10)
+
+#create to data.frame
+hasil <- data.frame("Nama Produk" = names(top_10), "Jumlah" = bottom_10, row.names = NULL)
+write.csv(hasil, file="bottom10_item_retail.txt")
+```
+
+
+
+```{r}
+#Kita juga bisa tampilkan dalam bentuk data frame
+#nanti otomatis tipe datanya juga jadi "data.frame"
+data.frame("Nama Product"=names(bottom_10), "Jumlah"=bottom_10, row.names = NULL)
+
+
+
+```
+
+
+<br>
+
+**Apa itu Algoritma Apriori?**
+<br>
+Baik sebelum melanjutkan ke langkah selanjutnya kita bahas lebih dalam terlebih dahulu apa itu algoritma apriori, association, dan juga mengenai nilai Support, Confidence dan Lift yang mana ketiga nilai ini digunakan dalam algoritma appriori. 
+<br><br>
+
+
+**Association**
+<br>
+pengelompokkan hal yang biasanya terjadi bersamaan, misalnya 10 orang membeli susu kental manis, 5 orang dari 10 orang tersebut membeli keju lalu disimpulkan bahwa jika pelanggan membeli susu kental manis ia juga akan membeli keju.
+<br><br>
+
+**Algoritma Apriori**
+<br>
+Merupakan salah satu algoritma klasik untuk mencari frequent item/itemset pada transactional database. Algoritma Apriori digunakan agar computer dapat mempelajari aturan asosiasi, mencari pola hubungan antar satu atau lebih item dalam suatu dataset. Dengan memiliki data transaksi/market basket, Kita dapat melakukan Analisa terhadap kemungkinan membeli product yang lainnya. Berbagai algorithma yang digunakan dalam ‘association rule mining’ meliputi algorithma Apriori yang sangat terkenal (dimana sekumpulan item yang sering muncul diidentifikasi). 
+<br><br>
+
+
+**Support** 
+<br>
+Parameter yang digunakan, Nilai Support (nilai penunjang) yaitu nilai persentase kombinasi item tersebut dalam database. Support menunjukkan popularitas rata-rata produk atau item dalam database. Kita bisa mendapatkan nilai support dengan membagi jumlah total transaksi yang mengandung produk itu dengan jumlah total transaksi.
+<br><br>
+
+
+**Support case** 
+<br>
+Misalkan kita ingin menghitung nilai support dari produk kopi sachet,maka rumusnya
+<br>
+**Support(kopi) = jumlah transaksi kopi / total transaksi semua produk** 
+<br>
+Support(kopi) = 200/2000 = 0.1 = 10%
+<br>
+Selanjutnya untuk menghitung nilai support dari produk minyak goreng adalah:
+<br>
+**Support(minyak) = jumlah transaksi minyak / total transaksi semua produk**  
+Support(minyak) = 500 / 2000 = 0.25 = 25%
+<br>
+Terakhir nilai support dari kombinasi keduanya yaitu:
+<br>
+**Support(kopi dan minyak) = jumlah transaksi kombinasi kopi dan minyak / total transaksi semua produk**
+<br>
+Support(kopi dan minyak) = 100 / 2000 = 0.05 = 5%
+
+
+
+
+
+
+<br><br>
+**Confidence** 
+<br>
+Paramenter yang digunakan, nilai confidence (nilai kepastian) yaitu kuatnya hubungan antar item dalam aturan assosiatif.
+<br>
+Aturan assosiatif:
+<br>
+Dalam bentuk : {roti, mentega} -> {susu} (support = 40%, confidence = 50%)
+<br><br>
+
+
+**Confidence case** 
+<br>
+Confidence mengacu pada kemungkinan seorang pelanggan membeli kopi sachet dan minyak goreng secara bersamaan
+<br>
+
+Untuk menghitung nilai confidence kita perlu membagi jumlah transaksi kombinasi kopi sachet dan minyak goreng dengan jumlah total transaksi kopi
+<br>
+Rumusnya:
+<br>
+**Confidence = jumlah transaksi kombinasi kopi dan minyak / total transaksi kopi** 
+<br>
+Confidence = 100/200 = 0.5 = 50%
+
+<br>
+<br>
+
+
+
+
+**Lift Case** 
+<br>
+Lift adalah peningkatan rasio penjualan kopi saat kita menjual minyak goreng. Untuk mendapatkan nilai lift kita dapat menggunakan perhitungan berikut
+<br>
+Rumusnya:
+<br>
+**Lift = support(kopi dan minyak) / (support(kopi) * support(minyak))** 
+<br>
+Lift = 0.05 / (0.1 * 0.25) = 2
+Artinya ketika kita menjual kopi sachet bersama-sama dengan minyak goreng, kemungkinan seseorang membeli keduanya adalah 2 kali dibandingkan membeli secara terpisah.
+<br>
+Apabila nilai lift di bawah satu, maka menandakan bahwa pelanggan jarang membeli kedua barang tersebut secara bersamaan.
+<br>
+Sebaliknya, semakin besar nilainya, maka semakin baik kombinasinya dan pelanggan sering membelinya secara bersamaan.
+<br>
+<br>
+
+
+
+
+
+**cosine similarity python**
+<br>
+Jika kita menggunakan bahasa pemrogramman python untuk melakukan association rule mining kita bisa menggunakan cosine similarity python, yang mana dapat outputnya juga sama mencari similarity dari masing masingnya. bedanya adalah cosine similarity python bergantung pada attributenya bukan membaca database secara keseluruhan seperti algorithma Apriori yang mana jika jumlah datanya teramat sangat besar akan menghabiskan resource dan waktu. Jadi dengan cosine similarity python yang kita hitung adalah variable2 dari product tersebut. Misalnya produk kacamata variable2nya adalah warna, bentuk, ukuran lebar frame, tebal frame yang mana spesifikasi tst bisa kita tuangkan sebagai attribute level yang mana dapat digunakan untuk mencari kesaamaanya dengan produk kacamata yang lain. jadi dengan algoritma cosine similarity python kita tidak perlu membaca trac record dari customer database, yang kita baca hanya attribute dari spesifikasi produk kacamata tersebut dan ketika ada orang yang perna membeli kacamata itu, jadi kita bisa rekomendasikan dengan kacamata yang kita sudah cari kemiripannya
+
+<br><br>
+
+
+
+
+**Mendapatkan Kombinasi Produk yang menarik**
+<br><br>
+Pada tahap ini kita akan membuat daftar 10 paket kombinasi produk yang memenuhi syarat dibawah ini:
+<br>
+1. Memiliki asosiasi atau hubungan erat.
+<br>
+2. Kombinasi produk minimal 2 item, dan maksimum 3 item.
+<br>
+3. Kombinasi produk itu muncul setidaknya 10 dari dari seluruh transaksi.
+<br>
+4. Memiliki tingkat confidence minimal 50 persen.
+
+<br>
+
+
+```{r}
+#kode sebelumnya
+nama_file <- "transaksi_dqlab_retail.tsv"
+transaksi_tabular <- read.transactions(file=nama_file, format="single", sep="\t", cols=c(1,2), skip=1)
+
+# syarat kombinasi diatas diterapkan disini
+# supp = poin no 3
+apriori_rules <- apriori(transaksi_tabular, parameter=list(supp=10/length(transaksi_tabular), conf=0.5, minlen=2, maxlen=3))
+print(apriori_rules)
+
+
+```
+Bisa kita lihat jumlah rules nya ada 4637
+
+
+```{r}
+#n = 10 paket kombinasi produk yang memenuhi syarat
+#Kemudian kita sort berdasarkan nilai lift terbesar
+apriori_rules <- head(sort(apriori_rules, by='lift', decreasing = T),n=10)
+print(apriori_rules)
+
+```
+Kemudian kita sort berdasarkan 10 nilai lift terbesar. Kita memilih nilai lift karena Lift adalah peningkatan rasio penjualan suatu produk saat kita menjual produk lain
+
+
+```{r}
+# menampilkan hasilnya
+print(inspect(apriori_rules))
+
+#Hasilnya disimpan ke file kombinasi_retail.txt
+write(apriori_rules, file="kombinasi_retail.txt")
+```
+
+
+
+<br>
+
+**Mencari Paket Produk yang bisa dipasangkan dengan Item Slow-Moving**
+<br><br>
+Slow-moving item adalah produk yang pergerakan penjualannya lambat atau kurang cepat. Ini akan bermasalah apabila item produk tersebut masih menumpuk. Kadang kala item ini belum tentu tidak laku, hanya saja mungkin harganya tidak bagus dan jarang dibutuhkan jika dijual satuan.  Nah, jika tidak dijual satuan kita perlu cari asosiasi kuat dari item produk ini dengan produk lain sehingga jika dipaketkan akan menjadi lebih menarik.
+<br><br>
+Menurut manajer toko ada 2 produk slow-moving di tokonya adalah "Tas Makeup" dan "Baju Renang Pria Anak-anak". Manajer toko ingin meminta kombinasi yang bisa dipaketkan dengan kedua produk tersebut
+<br><br>
+Masing-masing produk tersebut dikeluarkan 3 rules yang asosiasinya paling kuat, sehingga total ada 6 rules (kenapa ada 6 hal itu karena minnya 2 maxnya 3 itu dikalikan hasilnya 6 untuk kemungkinannya). Persyaratan-persyaratan asosiasi kuat ini masih sama dengan yang telah disebutkan manajer toko sebelumnya, kecuali tingkat confidence dicoba pada tingkat minimal 0.1.
+<br>
+<br>
+Jika lupa bisa cek dibawah ini untuk syaratnya
+<br>
+1. Memiliki asosiasi atau hubungan erat.
+<br>
+2. Kombinasi produk minimal 2 item, dan maksimum 3 item.
+<br>
+3. Kombinasi produk itu muncul setidaknya 10 dari dari seluruh transaksi.
+<br>
+4. Memiliki tingkat confidence minimal 10 persen.
+
+<br>
+<br><br>
+
+
+```{r}
+nama_file <- "transaksi_dqlab_retail.tsv"
+#rubah bentuk data frame menjadi tabular
+transaksi_tabular <- read.transactions(file=nama_file, format="single", sep="\t", cols=c(1,2), skip=1)
+jumlah_transaksi<-length(transaksi_tabular)
+jumlah_kemunculan_minimal <- 10
+
+#Menerapkan apriori rulesnya 
+apriori_rules <- apriori(
+transaksi_tabular,
+parameter= list(supp=jumlah_kemunculan_minimal/jumlah_transaksi,
+conf=0.1, minlen=2, maxlen=3))
+
+#cek jumlah rules yang dihasilkan
+apriori_rules
+
+#membuat subset atau melakukan filter, yang mana dari 39.832 rules dari variable apriori_rules diatas kita pilih yang lift>1 dan rhs mengandung "Tas Makeup"
+apriori_rules1 <- subset(apriori_rules, lift > 1 & rhs %in% "Tas Makeup")
+
+#cek jumlah rules yang dihasilkan
+apriori_rules1
+
+#melakukan sorting dari 53 rules yang dihasilkan berdasarkan lift dan diambil nilai lift 3 terbanyak
+apriori_rules1 <- sort(apriori_rules1, by='lift', decreasing = T)[1:3]
+
+#cek jumlah rules setelah di sort
+apriori_rules1
+
+#membuat subset atau melakukan filter, yang mana dari 39.832 rules dari variable apriori_rules diatas kita pilih yang lift>1 dan rhs mengandung "Baju Renang Pria Anak-anak" 
+apriori_rules2 <- subset(apriori_rules, lift > 1 & rhs %in% "Baju Renang Pria Anak-anak")
+
+#cek jumlah rulesnya
+apriori_rules2
+
+# pmelakukan sorting dari 6 rules yang dihasilkan berdasarkan lift dan diambil nilai lift 3 terbanyak
+apriori_rules2 <- sort(apriori_rules2, by='lift', decreasing = T)[1:3]
+
+#gabungkan hasil rulesnya
+apriori_rules <- c(apriori_rules1, apriori_rules2)
+
+#Cek jumlah rules gabungan
+apriori_rules
+
+#Tampilkan rulesnya
+inspect(apriori_rules)
+```
+
+
+**Dari data diatas dapat kita lihat  kombinasi yang bisa dipaketkan dengan kedua produk slow-moving di toko yaitu produk  "Tas Makeup" dan "Baju Renang Pria Anak-anak"**
+
+
+```{r}
+#simpan hasilnya di file kombinasi_retail_slow_moving.txt
+write(apriori_rules, file="kombinasi_retail_slow_moving.txt")
+```
+
+
+
+
+
+
+
+

@@ -1,0 +1,77 @@
+QUERY STANDART DAN VARIASINYA
+
+
+a. SELECT = SELECT STATEMENT digunakan utnuk menetukan atau memilih data yang akan ditampilkan ketika melakukan query terhadap basis data.
+	1) untuk melihat semua kolom dari suatu tabel	
+		SELECT * FROM nasabah;
+	2) untuk melihat kolom tertentu
+		SELECT nama_nasabah FROM nasabah;
+		SELECT id_nasabah, nama_nasabah FROM nasabah;
+
+b. Columns Alias (AS) = digunakan untuk mengganti nama kolom pada tampilan SELECT
+	1) SELECT nama_nasabah AS "Nama Nasabah" FROM nasabah
+	2) SELECT nama_nasabah AS "Nasabah", alamat_nasabah AS "Alamat Nasabah" FROM nasabah;
+
+c. WHERE = digunakan untuk membatasi hasil SELECT yang ditampilkan berdasarkan kondisi yang ditentukan
+	1) SELECT nama_nasabah FROM nasabah WHERE nama_nasabah='Ali Topan';
+	2) SELECT nama_nasabah, alamat_nasabah FROM nasabah WHERE id_nasabah=2;
+
+	-> 	Bisa menggunakan >,<,<>(atau !=), >=, <=
+		Gunakan AND atau OR untuk lebih dari satu kondisi
+		1) SELECT * FROM nasabah WHERE nama_nasabah = 'Rina Marsudi' AND alamat_nasabah='Jl. Kusumanegara 30';
+		2) SELECT * FROM nasabah WHERE nama_nasabah='Ali Topan' OR id_nasabah=2;
+	
+	->	Pencarian NULL
+		Gunakan IS NULL untuk mencari NULL
+		1) SELECT * FROM rekening WHERE kode_cabang IS NULL;	
+		Gunakan IS NOT NULL untuk mencari yang tidak NULL
+		1) SELECT * FROM rekening WHERE kode_cabang IS NOT NULL;
+
+	->	Pencarian String
+		Gunakan LIKE untuk mencari string tertentu
+		1) SELECT * FROM nasabah WHERE nama_nasabah LIKE 'Ali Topan';
+		Bisa menggunakan %
+		1) SELECT * FROM nasabah WHERE alamat_nasabah LIKE '%negara%';
+		Bisa menggunakan _ untuk 1 huruf
+		1) SELECT * FROM nasabah WHRE nama_nasabah LIKE 'Alif T_p_n';
+		Untuk pencarian yang case insensitive (tidak memedulikan hurf besar atau kecil), gunakan ILIKE
+		1) SELECT * FROM nasabah WHRE nama_nasabah ILIKE '%marsudi';
+
+d. ORDER BY = Digunakan untuk mengurutkan hasil SELECT
+	->	Untuk mengurutkan dari kecil ke besar
+		1) SELECT*FROM nasabah ORDER BY nama_nasabah;
+
+	->	Untuk mengurutkan dari besar ke kecil
+		1) SELECT * FROM nasabah ORDER BY nama_nasabah DESC;
+
+	->	Untuk melakukan pengurutan lebih dari satu kolom, pisahkan degan tanda koma
+		1) SELECT * FROM  nasabah_has_rekeing ORDER BY no_rekening, id_nasabah;
+
+	->	Anda bisa menentukan DESC untuk kolom terntentu misalnya
+		1) SELECT * FROM nasabah_has_rekening ORDER BY no_rekening, id_nasabah DESC;
+		2) SELECT * FROM nasabah_has_rekening ORDER BY no_rekening DESC, id_nasabah;
+
+e. LIMIT dan OFFSET = Digunakan untuk membatasi jumlah baris yang ditampilkan dalam SELECT
+	->	Digunakan untuk membatasi jumlah baris yang ditampilkan dalam SELECT
+		- Hanya menampilkan 3 baris pertama:
+			1) SELECT * FROM nasabah ORDER BY id_nasabah LIMIT 3;
+		- Menampilkan 2 baris setelah melewati 2 baris pertama
+			1) SELECT * FROM nasabah ORDER BY id_nasabah LIMIT 2 OFFSET 2;
+
+	->	PERHATIAN
+		penggunaan LIMIT sebaiknya selalu digunakan bersama dengan ORDER BY, sehingga urutan yang ditampilkan akan selau konsisten
+
+	->	LIMIT dan OFFSET
+		sangat berguna dalam tampilan yang berbasis web agar tampilan data tidak terlalu besar dan bisa lebih rapi. tampilan data yang banyak bisa diatur dan dibagi menjadi beberapa halaman(pages
+
+
+
+
+
+
+
+
+
+
+
+		

@@ -1,0 +1,11 @@
+"","Nama.Produk","Jumlah"
+"1","Shampo Biasa",9
+"2","Serum Vitamin",11
+"3","Baju Batik Wanita",19
+"4","Baju Kemeja Putih",24
+"5","Celana Jogger Casual",27
+"6","Cover Koper",32
+"7","Sepatu Sandal Anak",46
+"8","Tali Pinggang Gesper Pria",56
+"9","Sepatu Sport merk Z",71
+"10","Wedges Hitam",75

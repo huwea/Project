@@ -1,0 +1,101 @@
+JOIN	
+
+
+Join merupakan salah satu kontruksi dasar dari SQL dan basis data. 
+Join dapat didefinsikan sebagai kombinasi record dari dua atau lebih table di dalam basis data relasional dan menghasilkan sebuah tabel (temporary) baru yang disebut sebagai joined tabel
+
+
+a. Cross Join
+	1) menggabungankan semua record dari tabel pertama dengan semua record di tabel kedua
+	2) banyaknya record dari cross join = jumlah record tabel pertama X jumlah record tabel kedua
+	
+	->	 SELECT * FROM rekening CROSS JOIN cabang_bank;
+
+b. Inner Join
+	1) inner join pada dasarnya adalah menemukan persimpangan (intersection) antara dua buah tabel
+	2) menghubungkan 2 (atau lebih) tabel berdasarkan attribute penghubung
+	3) atribut penghubung antara 2 (atau lebih) tabel umumnya adalah primary key
+	4) misalkan terdapat table A dan B, maka hasil inner join dapat diperlihatkan sebagai bidang terasir dalam diagram veen
+	
+	-> Metode 1
+		SELECT * FROM rekening INNER JOIN cabang_bank USING(kode_cabang);
+	-> Metode 2
+		SELECT * FROM rekening INNER JOIN cabang_bank ON rekening.kode_cabang = cabang_bank.kode_cabang;
+	-> Metode 3
+		SELECT * FROM rekening NATURAL INNER JOIN cabang_bank;
+	-> Metode 4
+		SELECT * FROM rekening, cabang_bank WHERE rekening.kode_cabang = cabang_bank.kode_cabang;
+		(dengan metode ini jika kolom yang ingin ditampilkan ada di lebih dari 2 tabel, maka anda harus menentukan tabel mana yang diinginkan)
+		SELECT nasabah.id_nasabah, nama_nasabah, no_rekening FROM nasabah, nasabah_has_rekening WHERE nasabah.id_nasabah=nasabah_has_rekening.id_nasabah;
+
+	-> PERHATIAN 
+		untuk INNER JOIN, kita dapat menghilangkan kata 'INNER'. Jadi, cukup dengan kata 'JOIN' saja
+		
+c. Tabel Alias
+	1) untuk kemudahan penulisan SQL, kita bisa membuat table alias
+	
+	->	SELECT * FROM nasabah A, nasabah_has_rekening B WHERE A.id_nasabah = B.id_nasabah;
+	->	SELECT A.id_nasabah, nama_nasabah, no_rekening FROM nasabah A, nasabah_has_rekening B WHERE A.id_nasabah = B.id_nasabah;
+
+d. Distinct
+	1) Dalam tabel join, kadang-kadang ada informasi yang berulang. Untuk menghilangakan pengulangan tersebut, gunakan DISTINCT
+
+	-> SELECT DISTINCT nama_nasabah, alamat_nasabah FROM nasabah NATURAL JOIN nasabah_has_rekening;
+
+e. Outer Join (dibagi ke dalam tiga jenis, yaitu right outer join, left outer join, dan full outer join)
+
+	1) Right outer join atau (RIGHT JOIN)
+		- Menampilkan hasil join tabel pertama(sisi kiri) dengan tabel kedua (sisi kanan), serta semua record di tabel kedua(sisi kanan/right)
+		- right outer join atau RIGHT JOIN mengembalikan semua nilai dari table kanan ditambahkan dengan nilai dari tabel kiri yang sesuai atau NULL jika tidak ada nilai yang sesuai.
+
+		-> SELECT * FROM rekening NATURAL RIGHT OUTER JOIN cabang_bank;
+		-> SELECT * FROM rekening RIGHT OUTER JOIN cabang_bank ON rekening.kode_cabangFK = cabang_bank.kode_cabang;
+	
+		-> PERHATIAN
+			Ketiga metode yaitu USING, ON, dan NATURAL dapat digunakan juga pada RIGHT OUTER JOIN
+
+	2) Left outer join atau (LEFT JOIN)
+		- Menampilkan hasil join tabel pertama(sisi kiri) dengan tabel kedua (sisi kanan), serta semua record di tabel kedua(sisi kiri /left)
+		- left outer join atau LEFT JOIN mengembalikan semua nilai dari table kiri ditambahkan dengan nilai dari tabel kanan yang sesuai atau NULL jika tidak ada nilai yang sesuai.
+
+		-> SELECT * FROM rekening NATURAL LEFT OUTER JOIN cabang_bank;
+		-> SELECT * FROM rekening LEFT OUTER JOIN cabang_bank ON rekening.kode_cabangFK = cabang_bank.kode_cabang;
+	
+		-> PERHATIAN
+			Ketiga metode yaitu USING, ON, dan NATURAL dapat digunakan juga pada LEFT OUTER JOIN
+
+	3) Full Outer Join
+		- Menampilkan hasil join tabel pertama dengan tabel kedua, serta semua record di kedua tabel tersebut
+
+		-> SELECT * FROM rekening NATURAL FULL OUTER JOIN cabang_bank;
+
+		-> PERHATIAN
+			Ketiga metode yaitu USING, ON, dan NATURAL dapat digunakan juga pada FULL OUTER JOIN
+
+d. Inner vs Outer Join
+	1) Dalam Inner Join yang ditampilkan hanyalah hasil dari table join yang berhasil, yaitu semua record yang berhubungan di kedua tabel yang digabungkan
+	2) Dalam Outer Join selain menampilkan hasil dari Inner Join, OUter JOin juga menmpilkan semua record yang tidak berhubungan di kedua tabel yang digabungkan
+
+e. MULTIPLE JOIN
+	1) Untuk lebih dari 2 tabel, tinggal diteruskan saja JOIN nya misalnya
+		-> SELECT * FROM nasabah NATURAL JOIN nasabah_has_rekening NATURAL JOIN rekening;
+		-> SELECT * FROM nasabah A, nasabah_has_rekening B, rekening C WHERE A.id_nasabah = B.id_nasabah AND B.no_rekening = C.no_rekening
+	2) Jika melakukan multiple join (lebih dari 2 tabel), Anda harus memperhatikan ururtan join. Urutan table join perlu mengikuti alur relationship yang tertera di ER diagram
+	3) Oleh karena itu, sebaiknya Anda menggunakan ER Diagram agar bisa menghasilkan table join yang benar
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

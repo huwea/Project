@@ -1,0 +1,13 @@
+1. face dataset.py
+Ambil gambar menggunakan skrip face dataset.py. Skrip akan menyimpan 30 gambar wajah Anda di folder gambar setelah Anda memasukkan nomor ID (HARUS berupa bilangan bulat dan inkremental (dimulai dengan 1 lalu 2, 3, ...) 
+disini saya membuat maksimal 2 wajah
+Catatan: Pastikan wajah Anda berada di tengah. Jendela akan runtuh saat semua 30 gambar diambil.
+run => face dataset.py
+
+2. face training.py
+Skrip face training.py akan melatih model untuk mengenali semua wajah dari 30 gambar yang diambil menggunakan skrip face dataset.py, dan menyimpan keluaran pelatihan di file trainer.yml
+run => python training.py
+
+3. face recognition.py
+face recognition.py adalah skrip utama. Anda perlu menambahkan nama setiap orang yang melihat fotonya diambil di skrip dataset.py. Program akan mengenali wajah sesuai dengan id yang diberikan dalam skrip dataset.py. Jika huan memiliki id 1, namanya akan muncul dalam daftar sebagai indeks 1 seperti ini names = ['None', 'huan'] # keep None dan menambahkan nama ke dalam daftar ini
+run => face recognition.py

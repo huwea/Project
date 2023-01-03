@@ -1,0 +1,17 @@
+DATA MANIPULTION LANGUAGE (DML)
+
+DML statement indentik dengan operasi INSERT, MODIFY dan DELETE
+berkaitan dengan manipulasi data pada table
+
+a. INSERT (menambahkan baris baru ke dalam tabel)
+	1) INSERT INTO nasabah(id_nasabah, nama_nasabah, alamat_nasabah) VALUES(1, 'Sutopo', 'JL. Jendral Sudirman 12')
+
+b. UPDATE (perubahan data dalam table)
+	1) UPDATE nasabah SET alamat_nasabah = 'Jalan Jenderal Sudirman No.12' WHERE nama_nasabah = 'Sutopo';
+	2) UPDATE nasabah SET alamat_nasabah = 'Jalan Slamet Riyadi No.34' WHERE nama_nasabah='Indri Hapsari';
+
+c. DELETE (menghapus data dalam tabel)
+	1) DELETE FROM nasabah WHERE nama_nasabah = 'Sutopo';
+
+
+	

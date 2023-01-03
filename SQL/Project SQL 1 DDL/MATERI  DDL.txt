@@ -1,0 +1,62 @@
+DATA DEFINITION LANGUAGE (DDL)
+berkaitan dengan pendefinisian table
+
+Implementasi dalam codingnya
+
+a. contoh untuk menentukan Primary Key(PK):(tabel utama)
+	1) CREATE TABLE dosen (nip INTEGER PRIMARY KEY, nama_dosen VARCHAR(45), alamat_dosen VERCHAR(255));
+
+b. contoh untuk menentukan Foreign Key(FK):(tabel kedua)
+	1) CREATE TABLE mahasiswa (nim INTEGER PRIMARY KEY, nip INTEGER REFERENCES dosen (nip), nama_mhs VARCHAR(45), alamat_mhs VARCHAR(255))
+
+c. contoh untuk banyak Foreign Key (FK)
+	1) CREATE TABLE mata_Kuliah(kode_mk INTEGER PRIMARY KEY, nip INTEGER REFERENCES dosen(nip), kode_ruang VARCHAR(20) REFERENCES ruang (kode_ruang), nama_mk VARCHAR(45), deskripsi_mk VARCHAR(255));
+
+d. contoh untuk menentukan composite PK:
+	1) CREATE TABLE mhs_ambil_mk(nim INTEGER REFERENCES mahasiswa (nim), kode_mk INTEGER REFERENCES mata_kuliah(kode_mk), PRIMARY KEY(nim, kode_mk));
+
+Referential Integrity
+a. Integritas database mengacu pada hubugan antar tabel melalui Foreign Key yang bersangkutan
+b. pada insert, record harus dimasukan di tabel utama dahulu, kemudian baru di tabel kedua
+c. pada delete, record harus dihapus di table kedua dulu, kemudian baru di tabel utama
+d. secara default, kebanyakan DBMS yang ada akn menolak insert atau delete yang melanggar integritas database
+
+
+ADVANCE CREATE TABLE OPTION
+
+a. Default
+	untuk menentukan nilai default kolom jika tidak ada data yang di insert untuk kolom
+	1) CREATE TABLE mahasiswa(nim integer PRIMARY KEY, nama_mhs varchar(45), fakultas varchar(5) DEFAULT 'FKI') 
+
+b. Not Null
+	Untuk membatasi agar nilai kolum tidak boleh NULL, jadi saat insert kita harus memasukan nilai untuk kolom tersebut
+	1) CREATE TABLE ruang(kode_ruang  varchar(20) PRIMARY KEY, lokasi_ruang varchar(255) NOT NULL,  kapasitas_ruang integer NOT NULL);
+
+c. Unique
+	Untuk memastikan nilai column unik
+	1) CREATE TABLE mata_kuliah(kode_mk integer PRIMARY KEY, nama_mk varchar(45) UNIQUE);
+	untuk multi kolom yang unik
+	1)CREATE TABLE dosen(nip integer PRIMARY KEY, nama_dosen varchar(45), alamat_dosen varchar(255), UNIQUE(nama_dosen, alamat_dosen));
+
+d. Check
+	untuk membatasi nilai kolom
+	CREATE TABLE produk(kode_produk integer PRIMARY KEY, nama_produk varchar(45), harga integer, CHECK(harga <=100000 AND kode_produk > 100));
+
+e. penentuan referential integrity
+	jika ada update atau delete di tabel utama, maka tabel kedua secara otomatis disesuaikan
+	1) CREATE TABLE pemasok(kode_pemasok integer PRIMARY KEY, nama_pemasok varchar(45), kode_produk integer REFERENCES produk ON DELETE CASCADE ON UPDATE CASCADE);
+
+f. Action
+	1) NO ACTION atau RESTRICT: update atau delete tidak dilakukan. ini merupakan pilihan default
+	2) CASCADE: nilai kolom di tabel kedua disesuaikan dengan nilai kolom di tabel utama
+	3) SET NULL: nilai kolom di tabel kedua dijadikan NULL
+	4) SET DEFAULT: nilai kolom di tabel kedua dijadikan nilai DEFAULT (nilai DEFAULT harus ditentukan pada waktu pembuatan tabel)
+
+g. Autoincrement
+	untuk fitur autoincrement gunakan 'serial'
+	1) CREATE TABLE nasabah(id_nasabah serial PRIMARY KEY, nama_nasabah VARCHAR(45));
+	jadin nanti kolom id_nasabah tidak perlu di insert karena database secara otomatis akan menambahknaya secara urut
+	serial hanya bisa dari 1 sampai 232
+	bigserial bisa samapi 1 samapi 264
+	jangan sekali2 memasukan nilai pada kolom yang menggunakan auto increment
+	penghapusan record tidak mempengaruhi urutan karena urutan pasti maju tidak pernah mundur

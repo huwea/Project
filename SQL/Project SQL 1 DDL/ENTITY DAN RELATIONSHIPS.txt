@@ -1,0 +1,32 @@
+Entity dan Relationships
+
+Macam Relationships:
+a. One-to-One : menggunakan notasi 1:1
+	1)Satu record di entity pertama berhubungan dengan hanya satu record di entity kedua, dan demikian pula sebaliknya.
+	2)Entity mana saja bisa menjadi tabel utama, sesuai dengan situasi/kebutuhan/analisis
+	3)Primary Key (PK) dari tabel utama menjadi Foreign Key (FK) di tabel kedua
+
+contoh kasus = 
+- dosen (mengepalai) jurusan, jadi 1 dosen hanya bisa mengepalai 1 jurusan dan 1 jurusan hanya bisa dikepalai 1 dosen
+- peminjam (dilayani) staff, jadi 1 mahasiswa hanya dilayani 1 staff dan 1 staff hanya bisa melayani 1 mahasiswa 
+
+b. One-to-Many (atau Many-to-One) : Menggunakan notasi 1:n 
+	1) Jika A terhadap B mempunyai one-to-many relationship (atau B terhadap A mempunyai many-to-one relationship): satu record di A bisa berhubugnan dengan banyak record di B, tetapi satu record di B berhubungan degnan hanya satu record di A
+	2) Entity di sisi One dalam hubungan One-to-Many menjadi tabel utama, dan entity disisi Many menjadi tabel kedua
+	3) PK dari tabel utama menjadi FK di tabel kedua
+
+contoh kasus = 
+- dosen (membimbing) mahasiswa, 1 dosen dapat membimbing banyak mahasiswa dan 1 mahasiswa hanya bisa dibimbing 1 dosen
+- peminjam (meminjam) buku, 1 peminjam dapat meminjam banyak buku dan 1 buku hanya dapat dipinjam 1 peminjam
+
+c.  Many-to-Many : menggunakan notasi m:n
+	1) Jika A terhada B mempunyai many-to-many reationship. satu record di A bisa berhubungan dengan banyak record di B, dan demikian pula sebaliknya.
+	2) Dalam implementasi database, harus ada sebuah tabel perantara di antara A dan B. A dan B menjadi tabel utaman, dan tabel perantara menjadi tabel kedua
+	3) PK dari A menjadi FK di tabel perantara (tabel kedua), dan PK dari B juga menjadi FK di tabel kedua. Gabungan semua FK di tabel kedua menjadi Composite PK untuk tabel kedua.
+	4) A terhadap tabel perantara mempunyai 1:n relationship
+	5) B terhadap tabel perantara juga mempunyai 1:n relationship
+
+contoh kasus = 
+- dosen (mengampu) matakuliah, dosen dapat mengampu banyak mata kuliah dan mata kulaih dapat diampu banyak dosen
+
+
